@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(CalculiX C Fortran) 
+project(CalculiX C Fortran)
+
+include_directories(../../usr/include)
+LINK_DIRECTORIES(../../usr/lib)
 
 add_definitions(-DARCH=1 -DSPOOLES -DARPACK -DMATRIXSTORAGE)
 
@@ -579,7 +582,7 @@ set(FORTRAN_SRCS
   src/fortran/mafillv.f
 )
 
-set(CALCULIX_SRCS 
+set(CALCULIX_SRCS
   src/expand.c
   src/arpack.c
   src/inicont.c
@@ -661,5 +664,5 @@ add_library(calculix SHARED ${CALCULIX_SRCS} ${FORTRAN_SRCS})
 # target_link_libraries(calculix -lspooles -lpthread -larpack -llapack -lblas -lm)
 
 add_executable(ccx src/ccx_2.7.c)
-target_link_libraries(ccx calculix -lspooles -larpack -llapack -lblas)
+target_link_libraries(ccx calculix -lspoolesMT -lspooles -larpack -llapack -lblas -lm gfortran)
 
