@@ -1,0 +1,849 @@
+
+     E I G E N V A L U E   O U T P U T
+
+ MODE NO    EIGENVALUE                       FREQUENCY   
+                                     REAL PART            IMAGINARY PART
+                           (RAD/TIME)      (CYCLES/TIME     (RAD/TIME)
+
+      1  -0.4194241E+00   0.0000000E+00   0.0000000E+00   0.6476296E+00
+      2  -0.1049105E+00   0.0000000E+00   0.0000000E+00   0.3238988E+00
+      3   0.1557618E+00   0.3946667E+00   0.6281316E-01   0.0000000E+00
+      4   0.5895225E+00   0.7678037E+00   0.1221998E+00   0.0000000E+00
+      5   0.7537953E+00   0.8682138E+00   0.1381805E+00   0.0000000E+00
+      6   0.1148342E+01   0.1071607E+01   0.1705516E+00   0.0000000E+00
+      7   0.1413911E+14   0.3760200E+07   0.5984545E+06   0.0000000E+00
+      8   0.1413911E+14   0.3760200E+07   0.5984545E+06   0.0000000E+00
+
+     P A R T I C I P A T I O N   F A C T O R S
+
+MODE NO.   X-COMPONENT     Y-COMPONENT     Z-COMPONENT     X-ROTATION      Y-ROTATION      Z-ROTATION
+
+      1  -0.2860508E-04  -0.1443243E-05   0.2177971E-05   0.1439603E-05  -0.2175081E-04   0.6290536E-05
+      2  -0.6447778E-05   0.2742694E-04  -0.2732311E-05  -0.2071608E-04  -0.4959423E-05   0.1546386E-04
+      3   0.1244613E-04   0.1105301E-04   0.3768575E-05  -0.7824246E-05   0.6318992E-05   0.3109833E-05
+      4   0.1515096E-06   0.1018462E-04   0.1424359E-04  -0.1106129E-05  -0.3905015E-05   0.2039091E-05
+      5   0.8924945E-06  -0.4977908E-05   0.3610242E-05   0.7984804E-05  -0.5509759E-05  -0.3486617E-05
+      6   0.2733223E-06   0.3260393E-05  -0.2780827E-04  -0.7207432E-05   0.1445536E-04  -0.1349938E-07
+      7   0.8470339E-20  -0.7250123E-04  -0.3778769E-05   0.3436123E-04   0.8453293E-05  -0.1621888E-03
+      8  -0.3250489E-19  -0.3778769E-05   0.7250123E-04   0.3814000E-04  -0.1621888E-03  -0.8453293E-05
+
+     E F F E C T I V E   M O D A L   M A S S
+
+MODE NO.   X-COMPONENT     Y-COMPONENT     Z-COMPONENT     X-ROTATION      Y-ROTATION      Z-ROTATION
+
+      1   0.8182508E-09   0.2082951E-11   0.4743558E-11   0.2072457E-11   0.4730979E-09   0.3957084E-10
+      2   0.4157384E-10   0.7522368E-09   0.7465522E-11   0.4291560E-09   0.2459588E-10   0.2391310E-09
+      3   0.1549062E-09   0.1221691E-09   0.1420215E-10   0.6121882E-10   0.3992966E-10   0.9671063E-11
+      4   0.2295516E-13   0.1037264E-09   0.2028798E-09   0.1223520E-11   0.1524914E-10   0.4157890E-11
+      5   0.7965464E-12   0.2477957E-10   0.1303385E-10   0.6375710E-10   0.3035744E-10   0.1215649E-10
+      6   0.7470508E-13   0.1063016E-10   0.7733001E-09   0.5194707E-10   0.2089575E-09   0.1822331E-15
+      7   0.7174664E-40   0.5256429E-08   0.1427910E-10   0.1180694E-08   0.7145816E-10   0.2630522E-07
+      8   0.1056568E-38   0.1427910E-10   0.5256429E-08   0.1454660E-08   0.2630522E-07   0.7145816E-10
+TOTAL     0.1015625E-08   0.6286333E-08   0.6286333E-08   0.3244729E-08   0.2716886E-07   0.2668136E-07
+
+     T O T A L   E F F E C T I V E   M A S S
+
+MODE NO.   X-COMPONENT     Y-COMPONENT     Z-COMPONENT     X-ROTATION      Y-ROTATION      Z-ROTATION
+
+          0.7255625E-08   0.7255625E-08   0.7255625E-08   0.4769375E-08   0.3823219E-07   0.3774469E-07
+
+
+ displacements (vx,vy,vz) for set OUT and time  0.1000000E-06
+
+        41  7.717595E-22  1.025641E-05 -3.705769E-22
+        42  2.371692E-20  3.970467E-21  6.153846E-05
+
+ displacements (vx,vy,vz) for set OUT and time  0.2000000E-06
+
+        41  1.980353E-20  4.102564E-05  7.993873E-21
+        42  9.732938E-20  6.442744E-20  2.051282E-04
+
+ displacements (vx,vy,vz) for set OUT and time  0.3000000E-06
+
+        41  2.324378E-20  9.230769E-05  1.622597E-20
+        42  1.511821E-19  7.681530E-20  2.666679E-04
+
+ displacements (vx,vy,vz) for set OUT and time  0.4000000E-06
+
+        41  3.671358E-20  1.641026E-04  3.599890E-20
+        42  2.657566E-19  8.893846E-20  2.051400E-04
+
+ displacements (vx,vy,vz) for set OUT and time  0.5000000E-06
+
+        41  5.542772E-20  2.564103E-04  5.802176E-20
+        42  4.713738E-19  4.489275E-20  2.055869E-05
+
+ displacements (vx,vy,vz) for set OUT and time  0.6000000E-06
+
+        41  9.420595E-20  3.692308E-04  9.232659E-20
+        42  5.819116E-19 -1.185846E-20 -2.870692E-04
+
+ displacements (vx,vy,vz) for set OUT and time  0.7000000E-06
+
+        41  9.664117E-20  5.025641E-04  1.423015E-19
+        42  8.707499E-19 -2.371692E-20 -7.177514E-04
+
+ displacements (vx,vy,vz) for set OUT and time  0.8000000E-06
+
+        41  1.027027E-19  6.564103E-04  1.931235E-19
+        42  7.868936E-19 -9.486769E-20 -1.271510E-03
+
+ displacements (vx,vy,vz) for set OUT and time  0.9000000E-06
+
+        41  2.451631E-19  8.307692E-04  2.693565E-19
+        42  1.259538E-18 -6.098637E-20 -1.948384E-03
+
+ displacements (vx,vy,vz) for set OUT and time  0.1000000E-05
+
+        41  2.340987E-19  1.025641E-03  3.354250E-19
+        42  1.428098E-18 -2.236167E-19 -2.748426E-03
+
+ displacements (vx,vy,vz) for set OUT and time  0.1100000E-05
+
+        41  2.994261E-19  1.241026E-03  4.336809E-19
+        42  2.088783E-18 -1.829591E-19 -3.671703E-03
+
+ displacements (vx,vy,vz) for set OUT and time  0.1200000E-05
+
+        41  3.627419E-19  1.476923E-03  5.251604E-19
+        42  2.536017E-18 -2.032879E-19 -4.718300E-03
+
+ displacements (vx,vy,vz) for set OUT and time  0.1300000E-05
+
+        41  4.173755E-19  1.733333E-03  6.301925E-19
+        42  3.130634E-18 -2.439455E-19 -5.888313E-03
+
+ displacements (vx,vy,vz) for set OUT and time  0.1400000E-05
+
+        41  3.062024E-19  2.010256E-03  7.521653E-19
+        42  3.886187E-18 -9.486769E-20 -7.181857E-03
+
+ displacements (vx,vy,vz) for set OUT and time  0.1500000E-05
+
+        41  6.068991E-19  2.307692E-03  8.334804E-19
+        42  4.357137E-18 -5.963112E-19 -8.599060E-03
+
+ displacements (vx,vy,vz) for set OUT and time  0.1600000E-05
+
+        41  4.648093E-19  2.625641E-03  9.351244E-19
+        42  4.634964E-18 -9.757820E-19 -1.014006E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.1700000E-05
+
+        41  3.701534E-19  2.964103E-03  1.097755E-18
+        42  4.736608E-18 -1.246832E-18 -1.180503E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.1800000E-05
+
+        41  3.993760E-19  3.323077E-03  1.206175E-18
+        42  4.296151E-18 -1.761829E-18 -1.359413E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.1900000E-05
+
+        41  4.739149E-19  3.702564E-03  1.355253E-18
+        42  5.027988E-18 -1.870249E-18 -1.550755E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.2000000E-05
+
+        41 -1.706771E-19  4.102564E-03  1.558541E-18
+        42  6.918565E-18 -1.572093E-18 -1.754549E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.2100000E-05
+
+        41 -1.291725E-19  4.523077E-03  1.734723E-18
+        42  7.406456E-18 -1.680513E-18 -1.970817E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.2200000E-05
+
+        41 -5.844527E-20  4.964103E-03  2.019327E-18
+        42  9.635847E-18  3.794708E-19 -2.199583E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.2300000E-05
+
+        41  8.555033E-20  5.425641E-03  2.195509E-18
+        42  1.205497E-17 -3.252607E-19 -2.440871E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.2400000E-05
+
+        41  2.795209E-19  5.907692E-03  2.412350E-18
+        42  1.240056E-17 -1.192622E-18 -2.694707E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.2500000E-05
+
+        41  5.759824E-19  6.410256E-03  2.737610E-18
+        42  1.485357E-17 -2.168404E-19 -2.961118E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.2600000E-05
+
+        41  8.648206E-19  6.933333E-03  2.954451E-18
+        42  1.494844E-17 -1.138412E-18 -3.240134E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.2700000E-05
+
+        41  8.978549E-20  7.476923E-03  3.198396E-18
+        42  1.607330E-17 -1.734723E-18 -3.531785E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.2800000E-05
+
+        41 -3.904822E-19  8.041026E-03  3.361027E-18
+        42  1.782157E-17 -2.602085E-18 -3.836103E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.2900000E-05
+
+        41 -6.683090E-19  8.625641E-03  3.686287E-18
+        42  2.218549E-17 -2.818926E-18 -4.153122E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.3000000E-05
+
+        41 -1.069803E-18  9.230769E-03  4.011548E-18
+        42  2.240233E-17 -1.301043E-18 -4.482875E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.3100000E-05
+
+        41 -1.965963E-18  9.856410E-03  4.336809E-18
+        42  2.556007E-17 -9.757820E-19 -4.825399E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.3200000E-05
+
+        41 -2.026103E-18  1.050256E-02  4.607859E-18
+        42  2.837899E-17 -8.673617E-19 -5.180731E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.3300000E-05
+
+        41 -1.312901E-18  1.116923E-02  4.716279E-18
+        42  2.547875E-17 -2.710505E-18 -5.548910E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.3400000E-05
+
+        41 -1.543294E-18  1.185641E-02  5.095750E-18
+        42  3.363737E-17 -3.469447E-18 -5.929977E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.3500000E-05
+
+        41 -2.029491E-18  1.256410E-02  5.204170E-18
+        42  3.081845E-17 -4.228388E-18 -6.323972E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.3600000E-05
+
+        41 -2.635967E-18  1.329231E-02  5.854692E-18
+        42  3.282422E-17 -2.493665E-18 -6.730939E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.3700000E-05
+
+        41 -3.630383E-18  1.404103E-02  6.342583E-18
+        42  3.759471E-17 -2.276825E-18 -7.150922E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.3800000E-05
+
+        41 -2.700341E-18  1.481026E-02  6.722053E-18
+        42  3.520947E-17 -2.385245E-18 -7.583966E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.3900000E-05
+
+        41 -2.530934E-18  1.560000E-02  6.993104E-18
+        42  3.355606E-17 -2.168404E-18 -8.030117E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.4000000E-05
+
+        41 -1.177376E-18  1.641026E-02  7.318365E-18
+        42  3.683577E-17 -7.155734E-18 -8.489425E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.4100000E-05
+
+        41 -2.425902E-18  1.724103E-02  7.806256E-18
+        42  4.258204E-17 -6.722053E-18 -8.961937E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.4200000E-05
+
+        41 -2.490277E-18  1.809231E-02  8.239937E-18
+        42  4.618701E-17 -5.421011E-18 -9.447705E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.4300000E-05
+
+        41  6.945670E-19  1.896410E-02  8.348357E-18
+        42  4.607859E-17 -1.040834E-17 -9.946780E-02
+
+ displacements (vx,vy,vz) for set OUT and time  0.4400000E-05
+
+        41  7.962110E-19  1.985641E-02  8.673617E-18
+        42  4.781332E-17 -1.105886E-17 -1.045922E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.4500000E-05
+
+        41  2.507218E-18  2.076923E-02  9.107298E-18
+        42  5.431853E-17 -9.974660E-18 -1.098506E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.4600000E-05
+
+        41  4.465558E-18  2.170256E-02  9.324139E-18
+        42  6.071532E-17 -9.107298E-18 -1.152438E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.4700000E-05
+
+        41  3.279712E-18  2.265641E-02  9.866240E-18
+        42  5.995638E-17 -7.372575E-18 -1.207723E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.4800000E-05
+
+        41  3.937009E-18  2.363077E-02  1.062518E-17
+        42  6.765422E-17 -3.469447E-18 -1.264365E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.4900000E-05
+
+        41  2.998497E-18  2.462564E-02  1.095044E-17
+        42  7.128629E-17 -3.903128E-18 -1.322372E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.5000000E-05
+
+        41  2.520770E-18  2.564103E-02  1.214306E-17
+        42  6.987683E-17  4.336809E-19 -1.381749E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.5100000E-05
+
+        41  3.821813E-18  2.667692E-02  1.225148E-17
+        42  7.497258E-17 -4.336809E-19 -1.442502E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.5200000E-05
+
+        41  2.480112E-18  2.773333E-02  1.344411E-17
+        42  8.028517E-17  3.469447E-18 -1.504638E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.5300000E-05
+
+        41  1.998998E-19  2.881026E-02  1.376937E-17
+        42  9.313297E-17  6.938894E-18 -1.568162E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.5400000E-05
+
+        41  1.284102E-18  2.990769E-02  1.398621E-17
+        42  9.161508E-17  8.673617E-19 -1.633081E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.5500000E-05
+
+        41  1.473837E-18  3.102564E-02  1.452831E-17
+        42  1.026739E-16  4.770490E-18 -1.699401E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.5600000E-05
+
+        41  2.764716E-18  3.216410E-02  1.507041E-17
+        42  1.048424E-16  1.734723E-18 -1.767129E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.5700000E-05
+
+        41  2.493665E-18  3.332308E-02  1.496199E-17
+        42  1.041918E-16 -2.168404E-18 -1.836272E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.5800000E-05
+
+        41 -1.605974E-18  3.450256E-02  1.615461E-17
+        42  1.066855E-16 -2.130281E-47 -1.906836E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.5900000E-05
+
+        41 -3.100141E-18  3.570256E-02  1.691355E-17
+        42  1.173649E-16  3.035766E-18 -1.978828E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.6000000E-05
+
+        41  3.557538E-19  3.692308E-02  1.713039E-17
+        42  1.231112E-16  2.168404E-18 -2.052254E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.6100000E-05
+
+        41  7.948557E-18  3.816410E-02  1.799776E-17
+        42  1.489694E-16  5.204170E-18 -2.127123E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.6200000E-05
+
+        41  1.501620E-17  3.942564E-02  1.929880E-17
+        42  1.471262E-16  9.974660E-18 -2.203440E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.6300000E-05
+
+        41  1.418950E-17  4.070769E-02  1.951564E-17
+        42  1.610040E-16  1.257675E-17 -2.281213E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.6400000E-05
+
+        41  1.334246E-17  4.201026E-02  2.059984E-17
+        42  1.694608E-16  1.431147E-17 -2.360449E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.6500000E-05
+
+        41  1.219050E-17  4.333333E-02  1.994932E-17
+        42  1.749902E-16  1.301043E-18 -2.441155E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.6600000E-05
+
+        41  1.074715E-17  4.467692E-02  2.081668E-17
+        42  2.053479E-16  4.770490E-18 -2.523338E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.6700000E-05
+
+        41  1.118083E-17  4.604103E-02  2.081668E-17
+        42  2.112026E-16 -7.372575E-18 -2.607005E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.6800000E-05
+
+        41  1.271905E-17  4.742564E-02  2.103352E-17
+        42  2.109857E-16 -1.734723E-18 -2.692164E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.6900000E-05
+
+        41  8.951444E-18  4.883077E-02  2.211772E-17
+        42  2.167320E-16 -1.084202E-17 -2.778823E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.7000000E-05
+
+        41  7.243826E-18  5.025641E-02  2.233456E-17
+        42  2.027458E-16 -1.908196E-17 -2.866988E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.7100000E-05
+
+        41  5.915678E-18  5.170256E-02  2.298509E-17
+        42  1.977585E-16 -1.301043E-17 -2.956666E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.7200000E-05
+
+        41  1.006953E-17  5.316923E-02  2.363561E-17
+        42  1.977585E-16 -1.951564E-17 -3.047866E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.7300000E-05
+
+        41  6.844026E-18  5.465641E-02  2.428613E-17
+        42  2.061068E-16 -2.428613E-17 -3.140594E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.7400000E-05
+
+        41  9.168285E-18  5.616410E-02  2.515349E-17
+        42  2.054563E-16 -2.255141E-17 -3.234859E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.7500000E-05
+
+        41  1.331536E-17  5.769231E-02  2.688821E-17
+        42  2.246467E-16 -1.647987E-17 -3.330666E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.7600000E-05
+
+        41  8.287370E-18  5.924103E-02  2.775558E-17
+        42  2.251888E-16 -6.071532E-18 -3.428025E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.7700000E-05
+
+        41  5.786929E-18  6.081026E-02  2.840610E-17
+        42  2.270319E-16 -1.561251E-17 -3.526941E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.7800000E-05
+
+        41  9.466440E-18  6.240000E-02  2.949030E-17
+        42  2.280077E-16 -1.040834E-17 -3.627424E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.7900000E-05
+
+        41  8.883682E-18  6.401026E-02  3.014082E-17
+        42  2.259477E-16 -1.474515E-17 -3.729479E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.8000000E-05
+
+        41  8.199279E-18  6.564103E-02  3.209238E-17
+        42  2.517517E-16  7.806256E-18 -3.833114E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.8100000E-05
+
+        41  4.065758E-20  6.729231E-02  3.230922E-17
+        42  2.487160E-16  2.602085E-18 -3.938336E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.8200000E-05
+
+        41  7.108300E-18  6.896410E-02  3.404395E-17
+        42  2.675811E-16  2.602085E-18 -4.045154E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.8300000E-05
+
+        41  8.131516E-18  7.065641E-02  3.556183E-17
+        42  2.637864E-16  2.255141E-17 -4.153572E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.8400000E-05
+
+        41  7.033762E-18  7.236923E-02  3.599551E-17
+        42  2.615096E-16 -8.673617E-19 -4.263600E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.8500000E-05
+
+        41  1.315950E-17  7.410256E-02  3.729655E-17
+        42  2.735442E-16  5.204170E-18 -4.375244E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.8600000E-05
+
+        41 -1.897354E-19  7.585641E-02  3.773024E-17
+        42  2.892651E-16  1.474515E-17 -4.488510E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.8700000E-05
+
+        41  9.120851E-18  7.763077E-02  3.773024E-17
+        42  3.042271E-16  1.647987E-17 -4.603406E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.8800000E-05
+
+        41  7.616520E-18  7.942564E-02  3.859760E-17
+        42  3.024924E-16  8.673617E-18 -4.719938E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.8900000E-05
+
+        41  3.848918E-18  8.124103E-02  3.816392E-17
+        42  3.048777E-16  5.204170E-18 -4.838113E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.9000000E-05
+
+        41  1.355253E-18  8.307692E-02  3.946496E-17
+        42  2.964209E-16 -1.908196E-17 -4.957937E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.9100000E-05
+
+        41 -8.131516E-19  8.493333E-02  3.989864E-17
+        42  3.354522E-16  8.673617E-18 -5.079418E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.9200000E-05
+
+        41 -1.391845E-17  8.681026E-02  4.119968E-17
+        42  4.061421E-16  1.561251E-17 -5.202560E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.9300000E-05
+
+        41  7.453890E-19  8.870769E-02  4.119968E-17
+        42  4.057085E-16 -2.602085E-18 -5.327370E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.9400000E-05
+
+        41  3.144186E-18  9.062564E-02  4.336809E-17
+        42  4.406198E-16  2.862294E-17 -5.453854E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.9500000E-05
+
+        41 -4.743385E-18  9.256410E-02  4.423545E-17
+        42  4.759648E-16  3.556183E-17 -5.582018E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.9600000E-05
+
+        41 -9.242824E-18  9.452308E-02  4.510281E-17
+        42  4.590512E-16  2.862294E-17 -5.711868E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.9700000E-05
+
+        41  4.201283E-19  9.650256E-02  4.683753E-17
+        42  4.631712E-16  4.597017E-17 -5.843407E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.9800000E-05
+
+        41  1.245477E-17  9.850256E-02  4.640385E-17
+        42  4.985162E-16  2.688821E-17 -5.976643E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.9900000E-05
+
+        41  1.801131E-17  1.005231E-01  4.857226E-17
+        42  5.366801E-16  5.377643E-17 -6.111579E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1000000E-04
+
+        41  6.938894E-18  1.025641E-01  5.074066E-17
+        42  5.423179E-16  5.637851E-17 -6.248221E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1010000E-04
+
+        41  4.960225E-18  1.046256E-01  5.464379E-17
+        42  5.952270E-16  9.280771E-17 -6.386573E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1020000E-04
+
+        41 -4.580754E-18  1.067077E-01  5.551115E-17
+        42  6.058522E-16  9.714451E-17 -6.526639E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1030000E-04
+
+        41  1.173649E-17  1.088103E-01  5.767956E-17
+        42  6.140921E-16  8.500145E-17 -6.668423E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1040000E-04
+
+        41  1.813328E-17  1.109333E-01  5.724587E-17
+        42  5.559789E-16  6.418477E-17 -6.811929E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1050000E-04
+
+        41  3.489776E-17  1.130769E-01  5.941428E-17
+        42  5.869871E-16  5.724587E-17 -6.957160E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1060000E-04
+
+        41  3.394908E-17  1.152410E-01  6.245005E-17
+        42  6.045511E-16  6.245005E-17 -7.104120E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1070000E-04
+
+        41  5.824876E-17  1.174256E-01  5.767956E-17
+        42  5.711577E-16  3.642919E-17 -7.252810E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1080000E-04
+
+        41  6.120321E-17  1.196308E-01  5.377643E-17
+        42  6.245005E-16 -3.469447E-17 -7.403235E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1090000E-04
+
+        41  3.443697E-17  1.218564E-01  5.464379E-17
+        42  6.806621E-16 -3.295975E-17 -7.555394E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1100000E-04
+
+        41  2.596664E-17  1.241026E-01  5.247539E-17
+        42  6.184289E-16 -9.887924E-17 -7.709291E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1110000E-04
+
+        41  3.791997E-17  1.263692E-01  5.854692E-17
+        42  6.379446E-16 -5.204170E-17 -7.864927E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1120000E-04
+
+        41  3.782510E-17  1.286564E-01  6.071532E-17
+        42  6.938894E-16 -2.775558E-17 -8.022303E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1130000E-04
+
+        41  4.401861E-17  1.309641E-01  6.375109E-17
+        42  6.576770E-16 -2.428613E-17 -8.181418E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1140000E-04
+
+        41  5.713745E-17  1.332923E-01  6.158268E-17
+        42  6.477024E-16 -7.979728E-17 -8.342275E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1150000E-04
+
+        41  4.057627E-17  1.356410E-01  5.898060E-17
+        42  5.746272E-16 -9.714451E-17 -8.504871E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1160000E-04
+
+        41  2.902951E-17  1.380103E-01  6.331741E-17
+        42  5.731093E-16 -6.071532E-17 -8.669207E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1170000E-04
+
+        41  1.036768E-17  1.404000E-01  6.505213E-17
+        42  6.570265E-16 -6.591949E-17 -8.835282E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1180000E-04
+
+        41  1.989511E-17  1.428103E-01  6.678685E-17
+        42  7.517858E-16 -3.989864E-17 -9.003093E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1190000E-04
+
+        41  2.572270E-17  1.452410E-01  6.678685E-17
+        42  7.658804E-16 -1.908196E-17 -9.172639E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1200000E-04
+
+        41  2.542454E-17  1.476923E-01  7.285839E-17
+        42  8.716985E-16  5.204170E-18 -9.343918E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1210000E-04
+
+        41  1.661540E-17  1.501641E-01  7.459311E-17
+        42  8.166211E-16 -3.469447E-17 -9.516925E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1220000E-04
+
+        41  4.464202E-17  1.526564E-01  7.459311E-17
+        42  8.808058E-16 -4.510281E-17 -9.691657E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1230000E-04
+
+        41  4.109126E-17  1.551692E-01  7.285839E-17
+        42  8.400398E-16 -7.632783E-17 -9.868111E-01
+
+ displacements (vx,vy,vz) for set OUT and time  0.1240000E-04
+
+        41  4.512992E-17  1.577026E-01  6.071532E-17
+        42  7.368238E-16 -2.324529E-16 -1.004628E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1250000E-04
+
+        41  4.990040E-17  1.602564E-01  5.290907E-17
+        42  5.833008E-16 -3.538836E-16 -1.022616E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1260000E-04
+
+        41  5.602615E-17  1.628308E-01  5.377643E-17
+        42  4.037569E-16 -4.458239E-16 -1.040775E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1270000E-04
+
+        41  6.133874E-17  1.654256E-01  4.423545E-17
+        42  2.662801E-16 -5.776629E-16 -1.059103E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1280000E-04
+
+        41  4.518413E-17  1.680410E-01  4.683753E-17
+        42  1.916869E-16 -5.221518E-16 -1.077601E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1290000E-04
+
+        41 -2.534323E-17  1.706769E-01  4.510281E-17
+        42  7.806256E-17 -5.585810E-16 -1.096267E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1300000E-04
+
+        41 -1.295622E-17  1.733333E-01  4.423545E-17
+        42 -3.035766E-18 -6.487866E-16 -1.115101E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1310000E-04
+
+        41 -2.686111E-17  1.760103E-01  6.158268E-17
+        42 -1.908196E-17 -5.186823E-16 -1.134101E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1320000E-04
+
+        41 -4.689174E-18  1.787077E-01  5.984796E-17
+        42  1.543904E-16 -5.412337E-16 -1.153267E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1330000E-04
+
+        41 -3.984443E-18  1.814256E-01  7.632783E-17
+        42  1.700029E-16 -3.712308E-16 -1.172598E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1340000E-04
+
+        41  3.510105E-17  1.841641E-01  9.194034E-17
+        42  4.119968E-16 -2.081668E-16 -1.192092E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1350000E-04
+
+        41  6.391372E-17  1.869231E-01  9.714451E-17
+        42  3.976854E-16 -2.307182E-16 -1.211749E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1360000E-04
+
+        41  5.968533E-17  1.897026E-01  8.847090E-17
+        42  4.623038E-16 -3.035766E-16 -1.231567E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1370000E-04
+
+        41  1.984090E-17  1.925026E-01  7.632783E-17
+        42  1.205633E-16 -5.620504E-16 -1.251545E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1380000E-04
+
+        41 -1.073360E-17  1.953231E-01  7.025630E-17
+        42 -1.808449E-16 -7.320533E-16 -1.271681E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1390000E-04
+
+        41 -4.065758E-18  1.981641E-01  5.637851E-17
+        42 -2.393918E-16 -8.257284E-16 -1.291974E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1400000E-04
+
+        41  3.241764E-17  2.010256E-01  7.372575E-17
+        42  1.899522E-16 -6.071532E-16 -1.312423E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1410000E-04
+
+        41  3.217370E-17  2.039077E-01  7.285839E-17
+        42 -2.511012E-16 -6.505213E-16 -1.333025E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1420000E-04
+
+        41 -1.634435E-17  2.068103E-01  5.551115E-17
+        42 -4.952636E-16 -8.743006E-16 -1.353780E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1430000E-04
+
+        41  4.987330E-18  2.097333E-01  5.637851E-17
+        42 -3.569194E-16 -8.777701E-16 -1.374685E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1440000E-04
+
+        41  2.087089E-18  2.126769E-01  4.770490E-17
+        42 -2.341877E-16 -9.992007E-16 -1.395739E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1450000E-04
+
+        41  4.065758E-17  2.156410E-01  5.637851E-17
+        42 -5.464379E-17 -9.089951E-16 -1.416939E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1460000E-04
+
+        41  1.153862E-16  2.186256E-01  8.326673E-17
+        42  2.042637E-16 -7.008283E-16 -1.438284E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1470000E-04
+
+        41  6.529608E-17  2.216308E-01  1.136244E-16
+        42 -1.500536E-16 -4.406198E-16 -1.459772E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1480000E-04
+
+        41  1.209156E-16  2.246564E-01  1.309716E-16
+        42  3.369700E-16 -2.081668E-16 -1.481400E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1490000E-04
+
+        41  2.921925E-17  2.277026E-01  1.526557E-16
+        42  4.423545E-17 -1.422473E-16 -1.503167E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1500000E-04
+
+        41  1.334653E-16  2.307692E-01  1.674008E-16
+        42  5.286570E-16  1.110223E-16 -1.525069E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1510000E-04
+
+        41  3.123315E-16  2.338564E-01  1.674008E-16
+        42  3.903128E-17 -3.763940E-48 -1.547105E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1520000E-04
+
+        41  3.374037E-16  2.369641E-01  1.283695E-16
+        42  1.543904E-16 -4.371503E-16 -1.569272E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1530000E-04
+
+        41  2.649790E-16  2.400923E-01  1.509209E-16
+        42 -4.206704E-17 -2.775558E-16 -1.591567E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1540000E-04
+
+        41  2.383076E-16  2.432410E-01  1.613293E-16
+        42 -3.664603E-16 -2.463307E-16 -1.613989E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1550000E-04
+
+        41  2.373048E-16  2.464103E-01  1.864828E-16
+        42 -6.262352E-16 -1.387779E-17 -1.636534E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1560000E-04
+
+        41  1.715750E-16  2.496000E-01  2.064321E-16
+        42 -1.360891E-15  3.816392E-17 -1.659199E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1570000E-04
+
+        41  1.993848E-16  2.528103E-01  1.214306E-16
+        42 -1.280226E-15 -7.251144E-16 -1.681982E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1580000E-04
+
+        41  2.474963E-16  2.560410E-01  8.500145E-17
+        42 -1.286731E-15 -1.082467E-15 -1.704880E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1590000E-04
+
+        41  1.536586E-16  2.592923E-01  1.006140E-16
+        42 -1.647987E-15 -9.436896E-16 -1.727889E+00
+
+ displacements (vx,vy,vz) for set OUT and time  0.1600000E-04
+
+        41  5.800482E-17  2.625641E-01  1.110223E-16
+        42 -2.662801E-15 -1.169204E-15 -1.751007E+00
