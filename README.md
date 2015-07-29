@@ -1,3 +1,9 @@
+[![JuliaFEMLogo](https://github.com/JuliaFEM/JuliaFEM.jl/blob/master/docs/logo/JuliaFEMLogo_128x128.png)](http://www.juliafem.org) 
+
+# See [JuliaFEM/CalculiX.jl](https://github.com/JuliaFEM/CalculiX.jl)
+
+# See also the original CalculiX package web-page: http://www.calculix.de/
+```
 !
 !     CalculiX - A 3-dimensional finite element program
 !              Copyright (C) 1998 Guido Dhondt
@@ -543,5 +549,5 @@ FREQUENCY CALCULATIONS
       fei(0)          tolerance (accuracy)
       fei(1)          lower value of requested frequency range
       fei(2)          upper value of requested frequency range
-
+```
 
