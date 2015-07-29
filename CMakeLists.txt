@@ -4,6 +4,7 @@ project(CalculiX C Fortran)
 
 include_directories(../../usr/include)
 LINK_DIRECTORIES(../../usr/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/../../usr/lib)
 
 add_definitions(-DARCH=1 -DSPOOLES -DARPACK -DMATRIXSTORAGE)
 
