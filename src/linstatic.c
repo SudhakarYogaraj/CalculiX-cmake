@@ -1,5 +1,5 @@
 /*     CalculiX - A 3-dimensional finite element program                   */
-/*              Copyright (C) 1998-2014 Guido Dhondt                          */
+/*              Copyright (C) 1998-2015 Guido Dhondt                          */
 
 /*     This program is free software; you can redistribute it and/or     */
 /*     modify it under the terms of the GNU General Public License as    */
@@ -32,7 +32,7 @@
    #include "pardiso.h"
 #endif
 
-void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
+void linstatic(double *co, ITG *nk, ITG **konp, ITG **ipkonp, char **lakonp,
 	     ITG *ne, 
 	     ITG *nodeboun, ITG *ndirboun, double *xboun, ITG *nboun, 
 	     ITG *ipompc, ITG *nodempc, double *coefmpc, char *labmpc,
@@ -44,7 +44,7 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 	     ITG *nmethod, ITG *ikmpc, ITG *ilmpc, ITG *ikboun, 
 	     ITG *ilboun,
 	     double *elcon, ITG *nelcon, double *rhcon, ITG *nrhcon,
-	     double *alcon, ITG *nalcon, double *alzero, ITG *ielmat,
+	     double *alcon, ITG *nalcon, double *alzero, ITG **ielmatp,
 	     ITG *ielorien, ITG *norien, double *orab, ITG *ntmat_,
 	     double *t0, double *t1, double *t1old,
 	     ITG *ithermal,double *prestr, ITG *iprestr, 
@@ -52,9 +52,9 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 	     ITG *kode, char *filab, double *eme,
              ITG *iexpl, double *plicon, ITG *nplicon, double *plkcon,
              ITG *nplkcon,
-             double *xstate, ITG *npmat_, char *matname, ITG *isolver,
+             double **xstatep, ITG *npmat_, char *matname, ITG *isolver,
              ITG *mi, ITG *ncmat_, ITG *nstate_, double *cs, ITG *mcs,
-             ITG *nkon, double *ener, double *xbounold,
+             ITG *nkon, double **enerp, double *xbounold,
 	     double *xforcold, double *xloadold,
              char *amname, double *amta, ITG *namta,
 	     ITG *nam, ITG *iamforc, ITG *iamload,
@@ -63,21 +63,27 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
              ITG *iendset, ITG *ialset, ITG *nprint, char *prlab,
              char *prset, ITG *nener, double *trab, 
              ITG *inotr, ITG *ntrans, double *fmpc, char *cbody, ITG *ibody,
-	     double *xbody, ITG *nbody, double *xbodyold, double *tper,
+	     double *xbody, ITG *nbody, double *xbodyold, double *timepar,
 	     double *thicke, char *jobnamec,char *tieset,ITG *ntie,
-             ITG *istep){
+	     ITG *istep,ITG *nmat,ITG *ielprop,double *prop,char *typeboun,
+	     ITG *mortar,ITG *mpcinfo,double *tietol,ITG *ics,ITG *icontact){
   
-  char description[13]="            ";
+  char description[13]="            ",*lakon=NULL;
 
-  ITG *inum=NULL,k,*icol=NULL,*irow=NULL,ielas,icmd=0,iinc=1,nasym=0,
+  ITG *inum=NULL,k,*icol=NULL,*irow=NULL,ielas=0,icmd=0,iinc=1,nasym=0,i,j,ic,ir,
       mass[2]={0,0}, stiffness=1, buckling=0, rhsi=1, intscheme=0,*ncocon=NULL,
       *nshcon=NULL,mode=-1,noddiam=-1,*ipobody=NULL,inewton=0,coriolis=0,iout,
-      ifreebody,*itg=NULL,ntg=0,symmetryflag=0,inputformat=0,ngraph=1,
+      ifreebody,*itg=NULL,ntg=0,symmetryflag=0,inputformat=0,ngraph=1,im,
       mt=mi[1]+1,ne0,*integerglob=NULL,iglob=0,*ipneigh=NULL,*neigh=NULL,
-      icfd=0,*inomat=NULL,mortar,*islavact=NULL,*islavnode=NULL,*nslavnode=NULL,
-      *islavsurf=NULL;
+      icfd=0,*inomat=NULL,*islavact=NULL,*islavnode=NULL,*nslavnode=NULL,
+      *islavsurf=NULL,nretain,*iretain=NULL,*noderetain=NULL,*ndirretain=NULL,
+      nmethodl,nintpoint,ifacecount,memmpc_,mpcfree,icascade,maxlenmpc,
+      ncont=0,*itietri=NULL,*koncont=NULL,nslavs=0,ismallsliding=0,
+      *itiefac=NULL,*imastnode=NULL,*nmastnode=NULL,*imastop=NULL,
+      *iponoels=NULL,*inoels=NULL,*ipe=NULL,*ime=NULL,iit=-1,iflagact=0,
+      icutb=0,*kon=NULL,*ipkon=NULL,*ielmat=NULL;
 
-  double *stn=NULL,*v=NULL,*een=NULL,cam[5],*xstiff=NULL,*stiini=NULL,
+  double *stn=NULL,*v=NULL,*een=NULL,cam[5],*xstiff=NULL,*stiini=NULL,*tper,
          *f=NULL,*fn=NULL,qa[3],*fext=NULL,*epn=NULL,*xstateini=NULL,
          *vini=NULL,*stx=NULL,*enern=NULL,*xbounact=NULL,*xforcact=NULL,
          *xloadact=NULL,*t1act=NULL,*ampli=NULL,*xstaten=NULL,*eei=NULL,
@@ -86,7 +92,9 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
          *stnr=NULL,*stni=NULL,*vmax=NULL,*stnmax=NULL,*springarea=NULL,
          *eenmax=NULL,*fnr=NULL,*fni=NULL,*emn=NULL,*clearini=NULL,ptime,
          *emeini=NULL,*doubleglob=NULL,*au=NULL,*ad=NULL,*b=NULL,*aub=NULL,
-         *adb=NULL,*pslavsurf=NULL,*pmastsurf=NULL,*cdn=NULL,*cdnr=NULL,*cdni=NULL;
+         *adb=NULL,*pslavsurf=NULL,*pmastsurf=NULL,*cdn=NULL,*cdnr=NULL,
+         *cdni=NULL,*submatrix=NULL,*xnoels=NULL,*cg=NULL,*straight=NULL,
+         *areaslav=NULL,*xmastnor=NULL,theta=0.,*ener=NULL,*xstate=NULL;
 
 #ifdef SGI
   ITG token;
@@ -96,8 +104,12 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 
   double *veold=NULL,*accold=NULL,bet,gam,dtime,time,reltime=1.;
 
-  icol=*icolp;
-  irow=*irowp;
+  icol=*icolp;irow=*irowp;
+
+  kon=*konp;ipkon=*ipkonp;lakon=*lakonp;ielmat=*ielmatp;ener=*enerp;
+  xstate=*xstatep;
+
+  tper=&timepar[1];
 
   time=*tper;
   dtime=*tper;
@@ -108,19 +120,20 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
      for a submodel */
 
   getglobalresults(jobnamec,&integerglob,&doubleglob,nboun,iamboun,xboun,
-		   nload,sideload,iamload,&iglob);
+		   nload,sideload,iamload,&iglob,nforc,iamforc,xforc,
+                   ithermal,nk,t1,iamt1);
 
   /* allocating fields for the actual external loading */
 
-  xbounact=NNEW(double,*nboun);
+  NNEW(xbounact,double,*nboun);
   for(k=0;k<*nboun;++k){xbounact[k]=xbounold[k];}
-  xforcact=NNEW(double,*nforc);
-  xloadact=NNEW(double,2**nload);
-  xbodyact=NNEW(double,7**nbody);
+  NNEW(xforcact,double,*nforc);
+  NNEW(xloadact,double,2**nload);
+  NNEW(xbodyact,double,7**nbody);
   /* copying the rotation axis and/or acceleration vector */
   for(k=0;k<7**nbody;k++){xbodyact[k]=xbody[k];}
   if(*ithermal==1){
-    t1act=NNEW(double,*nk);
+    NNEW(t1act,double,*nk);
     for(k=0;k<*nk;++k){t1act[k]=t1old[k];}
   }
   
@@ -128,7 +141,7 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 
   if(*nbody>0){
       ifreebody=*ne+1;
-      ipobody=NNEW(ITG,2*ifreebody**nbody);
+      NNEW(ipobody,ITG,2*ifreebody**nbody);
       for(k=1;k<=*nbody;k++){
 	  FORTRAN(bodyforce,(cbody,ibody,ipobody,nbody,set,istartset,
 			     iendset,ialset,&inewton,nset,&ifreebody,&k));
@@ -137,9 +150,146 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
       RENEW(ipobody,ITG,2*(ifreebody-1));
   }
 
+  /* contact conditions */
+  
+  if(*icontact==1){
+
+      memmpc_=mpcinfo[0];mpcfree=mpcinfo[1];icascade=mpcinfo[2];
+      maxlenmpc=mpcinfo[3];
+
+      inicont(nk,&ncont,ntie,tieset,nset,set,istartset,iendset,ialset,&itietri,
+	  lakon,ipkon,kon,&koncont,&nslavs,tietol,&ismallsliding,&itiefac,
+          &islavsurf,&islavnode,&imastnode,&nslavnode,&nmastnode,
+          mortar,&imastop,nkon,&iponoels,&inoels,&ipe,&ime,ne,&ifacecount,
+          nmpc,&mpcfree,&memmpc_,
+	  &ipompc,&labmpc,&ikmpc,&ilmpc,&fmpc,&nodempc,&coefmpc,
+	  iperturb,ikboun,nboun,co,istep,&xnoels);
+
+      if(ncont!=0){
+
+	  NNEW(cg,double,3*ncont);
+	  NNEW(straight,double,16*ncont);
+	  
+	  /* 11 instead of 10: last position is reserved for the
+	     local contact spring element number; needed as
+	     pointer into springarea */
+	  
+	  if(*mortar==0){
+	      RENEW(kon,ITG,*nkon+11*nslavs);
+	      NNEW(springarea,double,2*nslavs);
+	      if(*nener==1){
+		  RENEW(ener,double,mi[0]*(*ne+nslavs)*2);
+	      }
+	      RENEW(ipkon,ITG,*ne+nslavs);
+	      RENEW(lakon,char,8*(*ne+nslavs));
+	      
+	      if(*norien>0){
+		  RENEW(ielorien,ITG,mi[2]*(*ne+nslavs));
+		  for(k=mi[2]**ne;k<mi[2]*(*ne+nslavs);k++) ielorien[k]=0;
+	      }
+	      
+	      RENEW(ielmat,ITG,mi[2]*(*ne+nslavs));
+	      for(k=mi[2]**ne;k<mi[2]*(*ne+nslavs);k++) ielmat[k]=1;
+	      
+	      if(nslavs!=0){
+		  RENEW(xstate,double,*nstate_*mi[0]*(*ne+nslavs));
+		  for(k=*nstate_*mi[0]**ne;k<*nstate_*mi[0]*(*ne+nslavs);k++){
+		      xstate[k]=0.;
+		  }
+	      }
+	      
+	      NNEW(areaslav,double,ifacecount);
+	      NNEW(xmastnor,double,3*nmastnode[*ntie]);
+	  }else if(*mortar==1){
+	      NNEW(islavact,ITG,nslavnode[*ntie]);
+	      DMEMSET(islavact,0,nslavnode[*ntie],1);
+	      NNEW(clearini,double,3*9*ifacecount);
+	      NNEW(xmastnor,double,3*nmastnode[*ntie]);
+
+
+	      nintpoint=0;
+	      
+	      precontact(&ncont,ntie,tieset,nset,set,istartset,
+			 iendset,ialset,itietri,lakon,ipkon,kon,koncont,ne,
+			 cg,straight,co,vold,istep,&iinc,&iit,itiefac,
+			 islavsurf,islavnode,imastnode,nslavnode,nmastnode,
+			 imastop,mi,ipe,ime,tietol,&iflagact,
+			 &nintpoint,&pslavsurf,xmastnor,cs,mcs,ics,clearini,
+                         &nslavs);
+	      
+	      /* changing the dimension of element-related fields */
+	      
+	      RENEW(kon,ITG,*nkon+22*nintpoint);
+	      RENEW(springarea,double,2*nintpoint);
+	      RENEW(pmastsurf,double,6*nintpoint);
+	      
+	      if(*nener==1){
+		  RENEW(ener,double,mi[0]*(*ne+nintpoint)*2);
+	      }
+	      RENEW(ipkon,ITG,*ne+nintpoint);
+	      RENEW(lakon,char,8*(*ne+nintpoint));
+	      
+	      if(*norien>0){
+		  RENEW(ielorien,ITG,mi[2]*(*ne+nintpoint));
+		  for(k=mi[2]**ne;k<mi[2]*(*ne+nintpoint);k++) ielorien[k]=0;
+	      }
+	      RENEW(ielmat,ITG,mi[2]*(*ne+nintpoint));
+	      for(k=mi[2]**ne;k<mi[2]*(*ne+nintpoint);k++) ielmat[k]=1;
+
+              /* interpolating the state variables */
+
+	      if(*nstate_!=0){
+		  
+		  RENEW(xstate,double,*nstate_*mi[0]*(ne0+nintpoint));
+		  for(k=*nstate_*mi[0]*ne0;k<*nstate_*mi[0]*(ne0+nintpoint);k++){
+		      xstate[k]=0.;
+		  }
+		  
+		  RENEW(xstateini,double,*nstate_*mi[0]*(ne0+nintpoint));
+		  for(k=0;k<*nstate_*mi[0]*(ne0+nintpoint);++k){
+		      xstateini[k]=xstate[k];
+		  }
+	      }
+	  }
+	  
+          /* generating contact spring elements */
+
+	  contact(&ncont,ntie,tieset,nset,set,istartset,iendset,
+	     ialset,itietri,lakon,ipkon,kon,koncont,ne,cg,straight,nkon,
+	     co,vold,ielmat,cs,elcon,istep,&iinc,&iit,ncmat_,ntmat_,
+	     &ne0,vini,nmethod,nmpc,&mpcfree,&memmpc_,
+	     &ipompc,&labmpc,&ikmpc,&ilmpc,&fmpc,&nodempc,&coefmpc,
+	     iperturb,ikboun,nboun,mi,imastop,nslavnode,islavnode,islavsurf,
+	     itiefac,areaslav,iponoels,inoels,springarea,tietol,&reltime,
+	     imastnode,nmastnode,xmastnor,filab,mcs,ics,&nasym,
+	     xnoels,mortar,pslavsurf,pmastsurf,clearini,&theta,
+	     xstateini,xstate,nstate_,&icutb);
+	  
+	  printf("number of contact spring elements=%" ITGFORMAT "\n\n",*ne-ne0);
+	  
+          /* determining the structure of the stiffness/mass matrix */
+	  
+	  remastructar(ipompc,&coefmpc,&nodempc,nmpc,
+		 &mpcfree,nodeboun,ndirboun,nboun,ikmpc,ilmpc,ikboun,ilboun,
+		 labmpc,nk,&memmpc_,&icascade,&maxlenmpc,
+		 kon,ipkon,lakon,ne,nactdof,icol,jq,&irow,isolver,
+		 neq,nzs,nmethod,ithermal,iperturb,mass,mi,ics,cs,
+		 mcs,mortar,typeboun);
+      }
+
+      /* field for initial values of state variables (needed for contact */
+
+      if((*nstate_!=0)&&((*mortar==0)||(ncont==0))){
+	  NNEW(xstateini,double,*nstate_*mi[0]*(ne0+nslavs));
+	  for(k=0;k<*nstate_*mi[0]*(ne0+nslavs);++k){
+	      xstateini[k]=xstate[k];
+	  }
+      }
+  }
+
   /* allocating a field for the instantaneous amplitude */
 
-  ampli=NNEW(double,*nam);
+  NNEW(ampli,double,*nam);
 
   FORTRAN(tempload,(xforcold,xforc,xforcact,iamforc,nforc,xloadold,xload,
 	      xloadact,iamload,nload,ibody,xbody,nbody,xbodyold,xbodyact,
@@ -153,17 +303,17 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 
   /* determining the internal forces and the stiffness coefficients */
 
-  f=NNEW(double,*neq);
+  NNEW(f,double,*neq);
 
   /* allocating a field for the stiffness matrix */
 
-  xstiff=NNEW(double,(long long)27*mi[0]**ne);
+  NNEW(xstiff,double,(long long)27*mi[0]**ne);
 
   iout=-1;
-  v=NNEW(double,mt**nk);
-  fn=NNEW(double,mt**nk);
-  stx=NNEW(double,6*mi[0]**ne);
-  inum=NNEW(ITG,*nk);
+  NNEW(v,double,mt**nk);
+  NNEW(fn,double,mt**nk);
+  NNEW(stx,double,6*mi[0]**ne);
+  NNEW(inum,ITG,*nk);
   results(co,nk,kon,ipkon,lakon,ne,v,stn,inum,stx,
 	  elcon,nelcon,rhcon,nrhcon,alcon,nalcon,alzero,ielmat,
 	  ielorien,norien,orab,ntmat_,t0,t1act,ithermal,
@@ -179,20 +329,30 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 	  fmpc,nelemload,nload,ikmpc,ilmpc,istep,&iinc,springarea,
 	  &reltime,&ne0,xforc,nforc,thicke,shcon,nshcon,
 	  sideload,xloadact,xloadold,&icfd,inomat,pslavsurf,pmastsurf,
-	  &mortar,islavact,cdn,islavnode,nslavnode,ntie,clearini,islavsurf);
-  free(v);free(fn);free(stx);free(inum);
+	  mortar,islavact,cdn,islavnode,nslavnode,ntie,clearini,
+	  islavsurf,ielprop,prop);
+  SFREE(v);SFREE(fn);SFREE(stx);SFREE(inum);
   iout=1;
   
   /* determining the system matrix and the external forces */
 
-  ad=NNEW(double,*neq);
-  au=NNEW(double,*nzs);
-  fext=NNEW(double,*neq);
+  NNEW(ad,double,*neq);
+  NNEW(fext,double,*neq);
+
+  if(*nmethod==11){
+      NNEW(au,double,nzs[2]);
+      rhsi=0;
+      nmethodl=2;
+  }else{
+      NNEW(au,double,*nzs);
+      nmethodl=*nmethod;
+  }
+      
 
   FORTRAN(mafillsm,(co,nk,kon,ipkon,lakon,ne,nodeboun,ndirboun,xbounact,nboun,
 	    ipompc,nodempc,coefmpc,nmpc,nodeforc,ndirforc,xforcact,
 	    nforc,nelemload,sideload,xloadact,nload,xbodyact,ipobody,
-	    nbody,cgr,ad,au,fext,nactdof,icol,jq,irow,neq,nzl,nmethod,
+	    nbody,cgr,ad,au,fext,nactdof,icol,jq,irow,neq,nzl,&nmethodl,
 	    ikmpc,ilmpc,ikboun,ilboun,
 	    elcon,nelcon,rhcon,nrhcon,alcon,nalcon,alzero,ielmat,
 	    ielorien,norien,orab,ntmat_,
@@ -204,17 +364,192 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 	    ibody,xloadold,&reltime,veold,springarea,nstate_,
             xstateini,xstate,thicke,integerglob,doubleglob,
 	    tieset,istartset,iendset,ialset,ntie,&nasym,pslavsurf,
-	    pmastsurf,&mortar,clearini));
+	    pmastsurf,mortar,clearini,ielprop,prop));
+
+  if(nasym==1){
+      RENEW(au,double,2*nzs[1]);
+      symmetryflag=2;
+      inputformat=1;
+      
+      FORTRAN(mafillsmas,(co,nk,kon,ipkon,lakon,ne,nodeboun,
+                  ndirboun,xbounact,nboun,
+		  ipompc,nodempc,coefmpc,nmpc,nodeforc,ndirforc,xforcact,
+		  nforc,nelemload,sideload,xloadact,nload,xbodyact,ipobody,
+		  nbody,cgr,ad,au,fext,nactdof,icol,jq,irow,neq,nzl,
+		  nmethod,ikmpc,ilmpc,ikboun,ilboun,
+		  elcon,nelcon,rhcon,nrhcon,alcon,nalcon,alzero,
+		  ielmat,ielorien,norien,orab,ntmat_,
+		  t0,t1act,ithermal,prestr,iprestr,vold,iperturb,sti,
+		  nzs,stx,adb,aub,iexpl,plicon,nplicon,plkcon,nplkcon,
+		  xstiff,npmat_,&dtime,matname,mi,
+                  ncmat_,mass,&stiffness,&buckling,&rhsi,&intscheme,
+                  physcon,shcon,nshcon,cocon,ncocon,ttime,&time,istep,&iinc,
+                  &coriolis,ibody,xloadold,&reltime,veold,springarea,nstate_,
+                  xstateini,xstate,thicke,
+                  integerglob,doubleglob,tieset,istartset,iendset,
+		  ialset,ntie,&nasym,pslavsurf,pmastsurf,mortar,clearini,
+                  ielprop,prop));
+  }
 
   /* determining the right hand side */
 
-  b=NNEW(double,*neq);
+  NNEW(b,double,*neq);
   for(k=0;k<*neq;++k){
       b[k]=fext[k]-f[k];
   }
-  free(fext);free(f);
+  SFREE(fext);SFREE(f);
 
-  if(*nmethod!=0){
+  /* generation of a substructure stiffness matrix */
+
+  if(*nmethod==11){
+
+      /* factorizing the matrix */
+
+      if(*neq>0){
+	  if(*isolver==0){
+#ifdef SPOOLES
+	      spooles_factor(ad,au,adb,aub,&sigma,icol,irow,neq,nzs,&symmetryflag,
+			     &inputformat,&nzs[2]);
+#else
+	      printf("*ERROR in linstatic: the SPOOLES library is not linked\n\n");
+	      FORTRAN(stop,());
+#endif
+	  }
+	  else if(*isolver==7){
+#ifdef PARDISO
+	      pardiso_factor(ad,au,adb,aub,&sigma,icol,irow,neq,nzs,
+			     &symmetryflag,&inputformat,jq,&nzs[2]);
+#else
+	      printf("*ERROR in linstatic: the PARDISO library is not linked\n\n");
+	      FORTRAN(stop,());
+#endif
+	  }
+      }
+      
+    /* determining the nodes and the degrees of freedom in those nodes
+       belonging to the substructure */
+      
+    NNEW(iretain,ITG,*nk);
+    NNEW(noderetain,ITG,*nk);
+    NNEW(ndirretain,ITG,*nk);
+    nretain=0;
+
+    for(i=0;i<*nboun;i++){
+	if(strcmp1(&typeboun[i],"C")==0){
+	    iretain[nretain]=i+1;
+	    noderetain[nretain]=nodeboun[i];
+	    ndirretain[nretain]=ndirboun[i];
+	    nretain++;
+	}
+    }
+
+    RENEW(iretain,ITG,nretain);
+    RENEW(noderetain,ITG,nretain);
+    RENEW(ndirretain,ITG,nretain);
+
+    /* solving the system of equations with appropriate rhs */
+
+    NNEW(submatrix,double,nretain*nretain);
+
+    for(i=0;i<nretain;i++){
+	DMEMSET(b,0,*neq,0.);
+	ic=*neq+iretain[i]-1;
+	for(j=jq[ic]-1;j<jq[ic+1]-1;j++){
+	    ir=irow[j]-1;
+	    b[ir]-=au[j];
+	}
+
+	/* solving the system */
+	  
+	if(*neq>0){
+	    if(*isolver==0){
+#ifdef SPOOLES
+		spooles_solve(b,neq);
+#endif
+	    }
+	    else if(*isolver==7){
+#ifdef PARDISO
+		pardiso_solve(b,neq,&symmetryflag);
+#endif
+	    
+	    }
+	}
+
+	  /* calculating the internal forces */
+
+	  NNEW(v,double,mt**nk);
+	  NNEW(fn,double,mt**nk);
+	  NNEW(stn,double,6**nk);
+	  NNEW(inum,ITG,*nk);
+	  NNEW(stx,double,6*mi[0]**ne);
+	  
+	  if(strcmp1(&filab[261],"E   ")==0) NNEW(een,double,6**nk);
+	  if(strcmp1(&filab[2697],"ME  ")==0) NNEW(emn,double,6**nk);
+	  if(strcmp1(&filab[522],"ENER")==0) NNEW(enern,double,*nk);
+	  
+	  NNEW(eei,double,6*mi[0]**ne);
+	  if(*nener==1){
+	      NNEW(stiini,double,6*mi[0]**ne);
+	      NNEW(enerini,double,mi[0]**ne);}
+	  
+	  /* replacing the appropriate boundary value by unity */
+
+	  xbounact[iretain[i]-1]=1.;
+
+	  results(co,nk,kon,ipkon,lakon,ne,v,stn,inum,stx,
+	    elcon,nelcon,rhcon,nrhcon,alcon,nalcon,alzero,ielmat,
+	    ielorien,norien,orab,ntmat_,t0,t1act,ithermal,
+	    prestr,iprestr,filab,eme,emn,een,iperturb,
+            f,fn,nactdof,&iout,qa,vold,b,nodeboun,ndirboun,xbounact,nboun,ipompc,
+	    nodempc,coefmpc,labmpc,nmpc,nmethod,cam,neq,veold,accold,&bet,
+            &gam,&dtime,&time,ttime,plicon,nplicon,plkcon,nplkcon,
+	    xstateini,xstiff,xstate,npmat_,epn,matname,mi,&ielas,&icmd,
+            ncmat_,nstate_,stiini,vini,ikboun,ilboun,ener,enern,emeini,
+            xstaten,eei,enerini,cocon,ncocon,set,nset,istartset,iendset,
+            ialset,nprint,prlab,prset,qfx,qfn,trab,inotr,ntrans,fmpc,
+	    nelemload,nload,ikmpc,ilmpc,istep,&iinc,springarea,&reltime,
+            &ne0,xforc,nforc,thicke,shcon,nshcon,
+            sideload,xloadact,xloadold,&icfd,inomat,pslavsurf,pmastsurf,
+            mortar,islavact,cdn,islavnode,nslavnode,ntie,clearini,
+	    islavsurf,ielprop,prop);
+
+	  xbounact[iretain[i]-1]=0.;
+	  
+	  SFREE(v);SFREE(stn);SFREE(inum);SFREE(stx);
+	  
+	  if(strcmp1(&filab[261],"E   ")==0) SFREE(een);
+	  if(strcmp1(&filab[2697],"ME  ")==0) SFREE(emn);
+	  if(strcmp1(&filab[522],"ENER")==0) SFREE(enern);
+	
+	  SFREE(eei);if(*nener==1){SFREE(stiini);SFREE(enerini);}
+
+	  /* storing the internal forces in the substructure
+             stiffness matrix */
+
+	  for(j=0;j<nretain;j++){
+	      submatrix[i*nretain+j]=fn[mt*(noderetain[j]-1)+ndirretain[j]];
+	  }
+
+	  SFREE(fn);
+
+    }
+
+    SFREE(au);SFREE(ad);SFREE(b);
+    SFREE(iretain);
+    
+    SFREE(xbounact);SFREE(xforcact);SFREE(xloadact);SFREE(t1act);SFREE(ampli);
+    SFREE(xbodyact);if(*nbody>0) SFREE(ipobody);SFREE(xstiff);
+    
+    if(iglob==1){SFREE(integerglob);SFREE(doubleglob);}
+    
+    FORTRAN(writesubmatrix,(submatrix,noderetain,ndirretain,&nretain,jobnamec));
+
+    SFREE(submatrix);SFREE(noderetain);SFREE(ndirretain);
+    
+    return;
+
+
+  }else if(*nmethod!=0){
 
     if(*isolver==0){
 #ifdef SPOOLES
@@ -226,10 +561,18 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 #endif
     }
     else if((*isolver==2)||(*isolver==3)){
+      if(nasym>0){
+	  printf(" *ERROR in nonlingeo: the iterative solver cannot be used for asymmetric matrices\n\n");
+	  FORTRAN(stop,());
+      }
       preiter(ad,&au,b,&icol,&irow,neq,nzs,isolver,iperturb);
     }
     else if(*isolver==4){
 #ifdef SGI
+      if(nasym>0){
+	  printf(" *ERROR in nonlingeo: the SGI solver cannot be used for asymmetric matrices\n\n");
+	  FORTRAN(stop,());
+      }
       token=1;
       sgi_main(ad,au,adb,aub,&sigma,b,icol,irow,neq,nzs,token);
 #else
@@ -239,6 +582,10 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
     }
     else if(*isolver==5){
 #ifdef TAUCS
+      if(nasym>0){
+	  printf(" *ERROR in nonlingeo: the TAUCS solver cannot be used for asymmetric matrices\n\n");
+	  FORTRAN(stop,());
+      }
       tau(ad,&au,adb,aub,&sigma,b,icol,&irow,neq,nzs);
 #else
             printf("*ERROR in linstatic: the TAUCS library is not linked\n\n");
@@ -255,25 +602,26 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 #endif
     }
 
-    free(ad);free(au);
+    SFREE(ad);SFREE(au);
 
     /* calculating the displacements and the stresses and storing */
     /* the results in frd format for each valid eigenmode */
 
-    v=NNEW(double,mt**nk);
-    fn=NNEW(double,mt**nk);
-    stn=NNEW(double,6**nk);
-    inum=NNEW(ITG,*nk);
-    stx=NNEW(double,6*mi[0]**ne);
+    NNEW(v,double,mt**nk);
+    NNEW(fn,double,mt**nk);
+    NNEW(stn,double,6**nk);
+    NNEW(inum,ITG,*nk);
+    NNEW(stx,double,6*mi[0]**ne);
   
-    if(strcmp1(&filab[261],"E   ")==0) een=NNEW(double,6**nk);
-    if(strcmp1(&filab[522],"ENER")==0) enern=NNEW(double,*nk);
-    if(strcmp1(&filab[2697],"ME  ")==0) emn=NNEW(double,6**nk);
+    if(strcmp1(&filab[261],"E   ")==0) NNEW(een,double,6**nk);
+    if(strcmp1(&filab[2697],"ME  ")==0) NNEW(emn,double,6**nk);
+    if(strcmp1(&filab[522],"ENER")==0) NNEW(enern,double,*nk);
+    if(strcmp1(&filab[2175],"CONT")==0) NNEW(cdn,double,6**nk);
 
-    eei=NNEW(double,6*mi[0]**ne);
+    NNEW(eei,double,6*mi[0]**ne);
     if(*nener==1){
-	stiini=NNEW(double,6*mi[0]**ne);
-	enerini=NNEW(double,mi[0]**ne);}
+	NNEW(stiini,double,6*mi[0]**ne);
+	NNEW(enerini,double,mi[0]**ne);}
 
     results(co,nk,kon,ipkon,lakon,ne,v,stn,inum,stx,
 	    elcon,nelcon,rhcon,nrhcon,alcon,nalcon,alzero,ielmat,
@@ -289,20 +637,15 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 	    nelemload,nload,ikmpc,ilmpc,istep,&iinc,springarea,&reltime,
             &ne0,xforc,nforc,thicke,shcon,nshcon,
             sideload,xloadact,xloadold,&icfd,inomat,pslavsurf,pmastsurf,
-            &mortar,islavact,cdn,islavnode,nslavnode,ntie,clearini,islavsurf);
+            mortar,islavact,cdn,islavnode,nslavnode,ntie,clearini,
+	    islavsurf,ielprop,prop);
 
-    free(eei);
+    SFREE(eei);
     if(*nener==1){
-	free(stiini);free(enerini);}
+	SFREE(stiini);SFREE(enerini);}
 
     memcpy(&vold[0],&v[0],sizeof(double)*mt**nk);
-    memcpy(&sti[0],&stx[0],sizeof(double)*6*mi[0]**ne);
-/*    for(k=0;k<mt**nk;++k){
-      vold[k]=v[k];
-    }
-    for(k=0;k<6*mi[0]**ne;++k){
-      sti[k]=stx[k];
-      }*/
+    memcpy(&sti[0],&stx[0],sizeof(double)*6*mi[0]*ne0);
 
     ++*kode;
 
@@ -315,11 +658,12 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
                    nstate_,istep,&iinc,iperturb,ener,mi,output,ithermal,
                    qfn,ialset,istartset,iendset,trab,inotr,ntrans,orab,
 	           ielorien,norien,sti,veold,&noddiam,set,nset,emn,thicke,
-	           jobnamec,&ne0,cdn,&mortar);
+	           jobnamec,&ne0,cdn,mortar,nmat);
     }
     else{
 	if(strcmp1(&filab[1044],"ZZS")==0){
-	    neigh=NNEW(ITG,40**ne);ipneigh=NNEW(ITG,*nk);
+	    NNEW(neigh,ITG,40**ne);
+	    NNEW(ipneigh,ITG,*nk);
 	}
 	ptime=*ttime+time;
 	frd(co,nk,kon,ipkon,lakon,ne,v,stn,inum,nmethod,
@@ -328,16 +672,17 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 	    ntrans,orab,ielorien,norien,description,ipneigh,neigh,
 	    mi,stx,vr,vi,stnr,stni,vmax,stnmax,&ngraph,veold,ener,ne,
 	    cs,set,nset,istartset,iendset,ialset,eenmax,fnr,fni,emn,
-	    thicke,jobnamec,output,qfx,cdn,&mortar,cdnr,cdni);
-	if(strcmp1(&filab[1044],"ZZS")==0){free(ipneigh);free(neigh);}
+	    thicke,jobnamec,output,qfx,cdn,mortar,cdnr,cdni,nmat);
+	if(strcmp1(&filab[1044],"ZZS")==0){SFREE(ipneigh);SFREE(neigh);}
     }
 
-    free(v);free(stn);free(inum);
-    free(b);free(stx);free(fn);
+    SFREE(v);SFREE(stn);SFREE(inum);
+    SFREE(b);SFREE(stx);SFREE(fn);
 
-    if(strcmp1(&filab[261],"E   ")==0) free(een);
-    if(strcmp1(&filab[522],"ENER")==0) free(enern);
-    if(strcmp1(&filab[2697],"ME  ")==0) free(emn);
+    if(strcmp1(&filab[261],"E   ")==0) SFREE(een);
+    if(strcmp1(&filab[2697],"ME  ")==0) SFREE(emn);
+    if(strcmp1(&filab[522],"ENER")==0) SFREE(enern);
+    if(strcmp1(&filab[2175],"CONT")==0) SFREE(cdn);
 
   }
   else {
@@ -345,9 +690,10 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
     /* error occurred in mafill: storing the geometry in frd format */
 
     ++*kode;
-    inum=NNEW(ITG,*nk);for(k=0;k<*nk;k++) inum[k]=1;
+    NNEW(inum,ITG,*nk);for(k=0;k<*nk;k++) inum[k]=1;
     if(strcmp1(&filab[1044],"ZZS")==0){
-	neigh=NNEW(ITG,40**ne);ipneigh=NNEW(ITG,*nk);
+	NNEW(neigh,ITG,40**ne);
+	NNEW(ipneigh,ITG,*nk);
     }
     ptime=*ttime+time;
     frd(co,nk,kon,ipkon,lakon,ne,v,stn,inum,nmethod,
@@ -356,10 +702,40 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
 	    ntrans,orab,ielorien,norien,description,ipneigh,neigh,
 	    mi,sti,vr,vi,stnr,stni,vmax,stnmax,&ngraph,veold,ener,ne,
 	    cs,set,nset,istartset,iendset,ialset,eenmax,fnr,fni,emn,
-	    thicke,jobnamec,output,qfx,cdn,&mortar,cdnr,cdni);
-    if(strcmp1(&filab[1044],"ZZS")==0){free(ipneigh);free(neigh);}
-    free(inum);FORTRAN(stop,());
+	    thicke,jobnamec,output,qfx,cdn,mortar,cdnr,cdni,nmat);
+    if(strcmp1(&filab[1044],"ZZS")==0){SFREE(ipneigh);SFREE(neigh);}
+    SFREE(inum);FORTRAN(stop,());
 
+  }
+
+  if(*icontact==1){
+      if(ncont!=0){
+	  *ne=ne0;
+	  if(*nener==1){
+	      RENEW(ener,double,mi[0]**ne*2);
+	  }
+	  RENEW(ipkon,ITG,*ne);
+	  RENEW(lakon,char,8**ne);
+	  RENEW(kon,ITG,*nkon);
+	  if(*norien>0){
+	      RENEW(ielorien,ITG,mi[2]**ne);
+	  }
+	  RENEW(ielmat,ITG,mi[2]**ne);
+	  SFREE(cg);SFREE(straight);
+	  SFREE(imastop);SFREE(itiefac);SFREE(islavnode);SFREE(islavsurf);
+	  SFREE(nslavnode);SFREE(iponoels);SFREE(inoels);SFREE(imastnode);
+	  SFREE(nmastnode);SFREE(itietri);SFREE(koncont);SFREE(xnoels);
+	  SFREE(springarea);SFREE(xmastnor);
+
+	  if(*mortar==0){
+	      SFREE(areaslav);
+	  }else if(*mortar==1){
+	      SFREE(pmastsurf);SFREE(ipe);SFREE(ime);SFREE(pslavsurf);
+	      SFREE(islavact);SFREE(clearini);
+	  }
+      }
+      mpcinfo[0]=memmpc_;mpcinfo[1]=mpcfree;mpcinfo[2]=icascade;
+      mpcinfo[3]=maxlenmpc;
   }
 
   /* updating the loading at the end of the step; 
@@ -375,13 +751,15 @@ void linstatic(double *co, ITG *nk, ITG *kon, ITG *ipkon, char *lakon,
     for(k=0;k<*nk;++k){vold[mt*k]=t1act[k];}
   }
 
-  free(xbounact);free(xforcact);free(xloadact);free(t1act);free(ampli);
-  free(xbodyact);if(*nbody>0) free(ipobody);free(xstiff);
+  SFREE(xbounact);SFREE(xforcact);SFREE(xloadact);SFREE(t1act);SFREE(ampli);
+  SFREE(xbodyact);if(*nbody>0) SFREE(ipobody);SFREE(xstiff);
 
-  if(iglob==1){free(integerglob);free(doubleglob);}
+  if(iglob==1){SFREE(integerglob);SFREE(doubleglob);}
 
-  *icolp=icol;
-  *irowp=irow;
+  *icolp=icol;*irowp=irow;
+
+  *konp=kon;*ipkonp=ipkon;*lakonp=lakon;*ielmatp=ielmat;*enerp=ener;
+  *xstatep=xstate;
 
   (*ttime)+=(*tper);
  

@@ -1,6 +1,6 @@
 !
 !     CalculiX - A 3-dimensional finite element program
-!              Copyright (C) 1998-2014 Guido Dhondt
+!              Copyright (C) 1998-2015 Guido Dhondt
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -191,7 +191,7 @@
                   enddo
                   indexcj=ipkon(j)
                   nopespringj=kon(indexcj)
-                  igauss=kon(indexcj+nopespringj+3)
+                  igauss=kon(indexcj+nopespringj+1)
                   xi=pslavsurf(1,igauss)
                   et=pslavsurf(2,igauss)
                   if((n-i).lt.2) exit
@@ -321,7 +321,7 @@
                   enddo
                   indexcj=ipkon(j)
                   nopespringj=kon(indexcj)
-                  igauss=kon(indexcj+nopespringj+3)
+                  igauss=kon(indexcj+nopespringj+1)
                   xi=pslavsurf(1,igauss)
                   et=pslavsurf(2,igauss)
                   if((n-i).lt.2) exit
@@ -488,7 +488,7 @@ c     incompatible modes elements
                do k=1,nfield
                   yn(k,kon(indexe+nope+j))=0.0d0
                enddo
-               inum(kon(indexe+nope+j))=inum(kon(indexe+nope+j))+1
+c               inum(kon(indexe+nope+j))=inum(kon(indexe+nope+j))+1
             enddo
          endif
 c     Bernhardi end

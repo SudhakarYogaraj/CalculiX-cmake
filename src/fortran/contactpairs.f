@@ -1,6 +1,6 @@
 !
 !     CalculiX - A 3-dimensional finite element program
-!              Copyright (C) 1998-2014 Guido Dhondt
+!              Copyright (C) 1998-2015 Guido Dhondt
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -25,6 +25,8 @@
 !
       implicit none
 !
+      logical linear
+!
       character*1 inpc(*)
       character*80 matname(*),material
       character*81 tieset(3,*),noset,set(*)
@@ -44,15 +46,16 @@
       if(istep.gt.0) then
          write(*,*) '*ERROR reading *CONTACT PAIR: *CONTACT PAIR should'
          write(*,*) '  be placed before all step definitions'
-         stop
+         call exit(201)
       endif
 !
-      mortar=0
+      mortar=1
+      linear=.false.
 !
       ntie=ntie+1
       if(ntie.gt.ntie_) then
          write(*,*) '*ERROR reading *CONTACT PAIR: increase ntie_'
-         stop
+         call exit(201)
       endif
       tietol(1,ntie)=1.d0
 !
@@ -68,6 +71,8 @@
             material=textpart(i)(13:92)
          elseif(textpart(i)(1:12).eq.'SMALLSLIDING') then
             tietol(1,ntie)=-tietol(1,ntie)
+         elseif(textpart(i)(1:6).eq.'LINEAR') then
+            linear=.true.
          elseif(textpart(i)(1:7).eq.'ADJUST=') then
             read(textpart(i)(8:25),'(f20.0)',iostat=istat) adjust
             if(istat.gt.0) then
@@ -86,7 +91,7 @@
                   write(*,*) '       has not been defined'
                   call inputerror(inpc,ipoinpc,iline,
      &"*CONTACT PAIR%")
-                  stop
+                  call exit(201)
                endif
                do j=1,ipos-1
                   tieset(1,ntie)(j:j)=noset(j:j)
@@ -97,8 +102,18 @@
             else
                tietol(1,ntie)=dsign(1.d0,tietol(1,ntie))*(2.d0+adjust)
             endif
+         elseif(textpart(i)(1:18).eq.'TYPE=NODETOSURFACE') then
+            mortar=0
          elseif(textpart(i)(1:21).eq.'TYPE=SURFACETOSURFACE') then
             mortar=1
+         elseif(textpart(i)(1:11).eq.'TYPE=MORTAR') then
+            mortar=2
+         elseif(textpart(i)(1:13).eq.'TYPE=PGMORTAR') then
+            mortar=5
+         elseif(textpart(i)(1:14).eq.'TYPE=LINMORTAR') then
+            mortar=3
+         elseif(textpart(i)(1:16).eq.'TYPE=PGLINMORTAR') then
+            mortar=4
          else
             write(*,*) 
      &       '*WARNING reading *CONTACT PAIR: parameter not recognized:'
@@ -130,7 +145,7 @@
          write(*,*) '       interaction; '
          call inputerror(inpc,ipoinpc,iline,
      &"*CONTACT PAIR%")
-         stop
+         call exit(201)
       endif
       tietol(2,ntie)=i+0.5d0
 !
@@ -148,7 +163,7 @@
                write(*,*) '       must exceed 1.e-30'
                call inputerror(inpc,ipoinpc,iline,
      &"*CONTACT PAIR%")
-               stop
+               call exit(201)
             endif
          endif
       endif
@@ -160,7 +175,7 @@
       if((istat.lt.0).or.(key.eq.1)) then
          write(*,*)'*ERROR reading *CONTACT PAIR: definition of the '
          write(*,*) '      contact pair is not complete.'
-         stop
+         call exit(201)
       endif
 !
 !     storing the slave surface
@@ -170,6 +185,26 @@
          tieset(2,ntie)(81:81)=' '
          ipos=index(tieset(2,ntie),' ')
          tieset(2,ntie)(ipos:ipos)='T'
+      elseif(mortar.eq.2) then
+         tieset(2,ntie)(1:80)=textpart(1)(1:80)
+         tieset(2,ntie)(81:81)=' '
+         ipos=index(tieset(2,ntie),' ')
+         tieset(2,ntie)(ipos:ipos)='M'
+      elseif(mortar.eq.3) then
+         tieset(2,ntie)(1:80)=textpart(1)(1:80)
+         tieset(2,ntie)(81:81)=' '
+         ipos=index(tieset(2,ntie),' ')
+         tieset(2,ntie)(ipos:ipos)='O'
+      elseif(mortar.eq.4) then
+         tieset(2,ntie)(1:80)=textpart(1)(1:80)
+         tieset(2,ntie)(81:81)=' '
+         ipos=index(tieset(2,ntie),' ')
+         tieset(2,ntie)(ipos:ipos)='P'      
+      elseif(mortar.eq.5) then
+         tieset(2,ntie)(1:80)=textpart(1)(1:80)
+         tieset(2,ntie)(81:81)=' '
+         ipos=index(tieset(2,ntie),' ')
+         tieset(2,ntie)(ipos:ipos)='G'
       else
          tieset(2,ntie)(1:80)=textpart(1)(1:80)
          tieset(2,ntie)(81:81)=' '
@@ -187,7 +222,7 @@
 !     to the nonlinear calculation of strains (i.e.
 !     iperturb(2) should be zero unless NLGEOM is activated)
 !
-      if(iperturb(1).eq.0) then
+      if((iperturb(1).eq.0).and.(.not.linear)) then
          iperturb(1)=2
       endif
 !

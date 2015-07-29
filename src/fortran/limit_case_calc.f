@@ -75,7 +75,7 @@
          root=(1+0.5d0*(km1)*M2**2)
          f=Qred-M2*root**(expon1)
 !
-         df=root**expon1*(-1d0+0.5*(kp1)*M2**2*root**(-1))
+         df=root**expon1*(-1d0+0.5*(kp1)*M2**2*root**-1)
 !
          if(dabs(-f/df).le.1E-6) then
             M2=M2-f/df

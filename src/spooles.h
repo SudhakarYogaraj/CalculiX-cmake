@@ -23,11 +23,11 @@
  */
 
 #include <pthread.h>
-#include <spooles/misc.h>
-#include <spooles/FrontMtx.h>
-#include <spooles/SymbFac.h>
+#include <misc.h>
+#include <FrontMtx.h>
+#include <SymbFac.h>
 #if USE_MT
-#include <spooles/MT/spoolesMT.h>
+#include <MT/spoolesMT.h>
 #endif
 
 /* increase this for debugging */

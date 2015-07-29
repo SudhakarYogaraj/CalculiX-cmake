@@ -37,7 +37,8 @@ void contact(ITG *ncont, ITG *ntie, char *tieset,ITG *nset,char *set,
 	     ITG *imastnode, ITG *nmastnode, double *xmastnor,
 	     char *filab, ITG *mcs, ITG *ics,
              ITG *nasym,double *xnoels,ITG *mortar,double *pslavsurf,
-             double *pmastsurf,double *clearini,double *theta){
+             double *pmastsurf,double *clearini,double *theta,
+             double *xstateini,double *xstate,ITG *nstate_,ITG *icutb){
     
     char *labmpc=NULL;
 
@@ -72,15 +73,15 @@ void contact(ITG *ncont, ITG *ntie, char *tieset,ITG *nset,char *set,
 	if(itietri[2*i+1]-itietri[2*i]+1>ntrimax)
 	    ntrimax=itietri[2*i+1]-itietri[2*i]+1;
     }
-    xo=NNEW(double,ntrimax);
-    yo=NNEW(double,ntrimax);
-    zo=NNEW(double,ntrimax);
-    x=NNEW(double,ntrimax);
-    y=NNEW(double,ntrimax);
-    z=NNEW(double,ntrimax);
-    nx=NNEW(ITG,ntrimax);
-    ny=NNEW(ITG,ntrimax);
-    nz=NNEW(ITG,ntrimax);
+    NNEW(xo,double,ntrimax);
+    NNEW(yo,double,ntrimax);
+    NNEW(zo,double,ntrimax);
+    NNEW(x,double,ntrimax);
+    NNEW(y,double,ntrimax);
+    NNEW(z,double,ntrimax);
+    NNEW(nx,ITG,ntrimax);
+    NNEW(ny,ITG,ntrimax);
+    NNEW(nz,ITG,ntrimax);
     
     if(*mortar==0){
     
@@ -91,7 +92,7 @@ void contact(ITG *ncont, ITG *ntie, char *tieset,ITG *nset,char *set,
           imastop,nslavnode,islavnode,islavsurf,itiefac,areaslav,iponoels,
           inoels,springarea,
           set,nset,istartset,iendset,ialset,tietol,reltime,
-          imastnode,nmastnode,filab,nasym,xnoels));
+	  filab,nasym,xnoels,icutb));
 
     }else if(*mortar==1){
 
@@ -99,12 +100,12 @@ void contact(ITG *ncont, ITG *ntie, char *tieset,ITG *nset,char *set,
 	  lakon,cg,straight,ifree,koncont,co,vold,xo,yo,zo,x,y,z,nx,ny,nz,
           ielmat,elcon,istep,iinc,iit,ncmat_,ntmat_,mi,imastop,islavsurf,
 	  itiefac,springarea,tietol,reltime,filab,nasym,pslavsurf,pmastsurf,
-	  clearini,theta));
+	  clearini,theta,xstateini,xstate,nstate_,ne0,icutb));
 
     }
 
-    free(xo);free(yo);free(zo);free(x);free(y);free(z);free(nx);
-    free(ny);free(nz);
+    SFREE(xo);SFREE(yo);SFREE(zo);SFREE(x);SFREE(y);SFREE(z);SFREE(nx);
+    SFREE(ny);SFREE(nz);
 
     *ipompcp=ipompc;*labmpcp=labmpc;*ikmpcp=ikmpc;*ilmpcp=ilmpc;
     *fmpcp=fmpc;*nodempcp=nodempc;*coefmpcp=coefmpc;

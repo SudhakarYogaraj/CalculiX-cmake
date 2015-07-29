@@ -1,6 +1,6 @@
 !
 !     CalculiX - A 3-dimensional finite element program
-!              Copyright (C) 1998-2014 Guido Dhondt
+!              Copyright (C) 1998-2015 Guido Dhondt
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -33,10 +33,10 @@
 !
       character*1 type,typeboun(*)
       character*8 lakon(*)
-      character*20 labmpc(*)
+      character*20 labmpc(*),label
 !
-      integer ikforc(*),ilforc(*),nodeforc(2,*),ndirforc(*),
-     &  iamforc(*),idim,ier,matz,
+      integer ikforc(*),ilforc(*),nodeforc(2,*),ndirforc(*),itr,idirref,
+     &  iamforc(*),idim,ier,matz,nodeact,linc,lend,lstart,nnodes,
      &  nforc,nforc_,ntrans,inotr(2,*),rig(*),ipompc(*),nodempc(3,*),
      &  nmpc,nmpc_,mpcfree,ikmpc(*),ilmpc(*),iponoel(*),inoel(3,*),
      &  iponoelmax,kon(*),ipkon(*),ne,iponor(2,*),knor(*),nforcold,
@@ -47,7 +47,7 @@
      &  nboun,nboun_,iamboun(*),nmethod,iperturb,nrhs,ipiv(3),info,m,
      &  mi(*),idefforc(*),nedge
 !
-      real*8 xforc(*),trab(7,*),coefmpc(*),xnor(*),val,co(3,*),
+      real*8 xforc(*),trab(7,*),coefmpc(*),xnor(*),val,co(3,*),dot,
      &  thicke(mi(3),*),pi,xboun(*),xnoref(3),dmax,d(3,3),e(3,3,3),
      &  alpha,q(3),w(3),xn(3),a(3,3),a1(3),a2(3),dd,c1,c2,c3,ww,c(3,3),
      &  vold(0:mi(2),*),e1(3),e2(3),t1(3),b(3,3),x(3),y(3),fv1(3),
@@ -58,6 +58,7 @@
      &        0.,0.,1.,0.,0.,0.,-1.,0.,0.,
      &        0.,-1.,0.,1.,0.,0.,0.,0.,0./
 !
+      label='                    '
       fixed=.false.
 !
       add=.false.
@@ -114,6 +115,7 @@
          indexk=iponor(2,indexe+j)
          if(nam.gt.0) iamplitude=iamforc(i)
          idir=ndirforc(i)
+         val=xforc(i)
 !
          if(rig(node).ne.0) then
             if(idir.gt.4) then
@@ -123,9 +125,9 @@
                   write(*,*) '       however, the elements to which'
                   write(*,*) '       this node belongs do not have'
                   write(*,*) '       rotational DOFs'
-                  stop
+                  call exit(201)
                endif
-               val=xforc(i)
+c               val=xforc(i)
                k=idir-4
                irotnode=rig(node)
                call forcadd(irotnode,k,val,nodeforc,
@@ -136,8 +138,11 @@
          else
 !
 !           check for moments defined in any but the first step
+!           nonlinear dynamic case: creation of knots
+!           knots (expandable rigid bodies) can take rotational
+!           values arbitrarily exceeding 90 degrees
 !
-            if(idir.gt.4) then
+            if((idir.gt.4).and.((nmethod.eq.4).and.(iperturb.gt.1)))then
 !
 !              create a knot: determine the knot
 !
@@ -159,7 +164,7 @@
      &           '*ERROR in gen3dboun: a rotational DOF was applied'
                   write(*,*) 
      &           '*      to node',node,' without rotational DOFs'
-                  stop
+                  call exit(201)
                endif
 !
 !              remove all MPC's in which the knot nodes are
@@ -186,14 +191,14 @@
                nk=nk+1
                if(nk.gt.nk_) then
                   write(*,*) '*ERROR in rigidbodies: increase nk_'
-                  stop
+                  call exit(201)
                endif
                irotnode=nk
                rig(node)=irotnode
                nk=nk+1
                if(nk.gt.nk_) then
                   write(*,*) '*ERROR in rigidbodies: increase nk_'
-                  stop
+                  call exit(201)
                endif
                iexpnode=nk
                do k=1,ndepnodes
@@ -300,7 +305,7 @@
                if(info.ne.0) then
                   write(*,*) '*ERROR in gen3dforc:'
                   write(*,*) '       singular system of equations'
-                  stop
+                  call exit(201)
                endif
 !
                dd=0.d0
@@ -392,7 +397,7 @@ c               vold(1,iexpnode)=alpha
                   if(info.ne.0) then
                      write(*,*) '*ERROR in gen3dforc:'
                      write(*,*) '       singular system of equations'
-                     stop
+                     call exit(201)
                   endif
 !
 !              now b=F^T
@@ -420,7 +425,7 @@ c               vold(1,iexpnode)=alpha
                      write(*,*) 
      &                   '*ERROR in knotmpc while calculating the'
                      write(*,*) '       eigenvalues/eigenvectors'
-                     stop
+                     call exit(201)
                   endif
 !     
                   if((dabs(w(1)-1.d0).lt.dabs(w(2)-1.d0)).and.
@@ -513,7 +518,7 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
      &                    nmpc,nmpc_,mpcfree,inotr,trab,ntrans,
      &                    ikboun,ilboun,ikmpc,ilmpc,co,nk,nk_,labmpc,
      &                    type,typeboun,nmethod,iperturb,fixed,vold,
-     &                    irotnode,mi)
+     &                    irotnode,mi,label)
                   else
 !     
 !                    check for an unused rotational DOF
@@ -543,7 +548,7 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
                         if(nmpc.gt.nmpc_) then
                            write(*,*) 
      &                          '*ERROR in gen3dnor: increase nmpc_'
-                           stop
+                           call exit(201)
                         endif
 !     
                         ipompc(nmpc)=mpcfree
@@ -580,6 +585,148 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
                cycle
             endif
 !
+!           all cases except nonlinear dynamic case: creation
+!           of rigid body MPC's
+!
+            if((idir.gt.4).and.((nmethod.ne.4).or.(iperturb.le.1)))then
+!
+!              create a mean rotation MPC
+!              advantage: more accurate since less constraining
+!              disadvantage: cannot exceed 90 degrees rotation
+!
+!              if a mean rotation MPC has already been created 
+!              for idof, ilforc(id) contains the index of the
+!              SPC created for the angle value
+!
+               idof=8*(node-1)+idir
+               call nident(ikforc,idof,nforc,id)
+               if(ilforc(id).ne.i) cycle
+
+               idirref=idir-4
+!
+               if(lakon(ielem)(7:7).eq.'L') then
+                  lstart=3
+                  lend=1
+                  linc=-2
+!
+!                 calculating the normal vector =
+!                 vector along the drilling direction
+!
+                  do j=1,3
+                     xn(j)=co(j,knor(indexk+3))-co(j,knor(indexk+1))
+                  enddo
+                  dd=dsqrt(xn(1)*xn(1)+xn(2)*xn(2)+xn(3)*xn(3))
+                  do j=1,3
+                     xn(j)=xn(j)/dd
+                  enddo
+!                  
+               elseif(lakon(ielem)(7:7).eq.'B') then
+                  lstart=4
+                  lend=1
+                  linc=-1
+               endif
+!
+!              check for transformations
+!
+               if(ntrans.le.0) then
+                  itr=0
+               elseif(inotr(1,node).eq.0) then
+                  itr=0
+               else
+                  itr=inotr(1,node)
+               endif
+!
+!              determine a unit vector on the rotation axis
+!
+               if(itr.eq.0) then
+                  do j=1,3
+                     do k=1,3
+                        a(j,k)=0.d0
+                     enddo
+                     a(j,j)=1.d0
+                  enddo
+               else
+                  call transformatrix(trab(1,itr),co(1,node),a)
+               endif
+!
+!              check whether the rotation vector does not
+!              have a component along the drilling direction
+!
+               if(lakon(ielem)(7:7).eq.'L') then
+                  dot=a(1,idirref)*xn(1)+a(2,idirref)*xn(2)+
+     &                a(3,idirref)*xn(3)
+                  if(dot.gt.0.05) then
+                     write(*,*) '*ERROR in gen3dforc: applied'
+                     write(*,*) '       moment in node ',node
+                     write(*,*) '       and direction ',idir-1
+                     write(*,*) '       has a significant'
+                     write(*,*) 
+     &                    '       component along the drilling'
+                     write(*,*) '       direction; this is not'
+                     write(*,*) '       allowed'
+                     call exit(201)
+                  endif
+               endif
+!
+!              specific label for mean rotations for beams and
+!              shells
+!
+               label='MEANROTBS           '
+               nnodes=0
+               do j=lstart,lend,linc
+                  nodeact=knor(indexk+j)
+                  do k=1,3
+                     nnodes=nnodes+1
+                     call usermpc(ipompc,nodempc,coefmpc,
+     &                    labmpc,nmpc,nmpc_,mpcfree,ikmpc,ilmpc,
+     &                    nk,nk_,nodeboun,ndirboun,ikboun,ilboun,
+     &                    nboun,nboun_,nnodes,nodeact,co,label,
+     &                    typeboun,iperturb,node,idirref,xboun)
+                  enddo
+               enddo
+!
+!              rotation value term
+!
+               nodeact=nk+1
+               do k=1,3
+                  co(k,nodeact)=a(k,idirref)
+               enddo
+               nnodes=nnodes+1
+               call usermpc(ipompc,nodempc,coefmpc,
+     &              labmpc,nmpc,nmpc_,mpcfree,ikmpc,ilmpc,
+     &              nk,nk_,nodeboun,ndirboun,ikboun,ilboun,
+     &              nboun,nboun_,nnodes,nodeact,co,label,
+     &              typeboun,iperturb,node,idirref,xboun)
+!
+!              inhomogeneous term
+!
+               nodeact=0
+               call usermpc(ipompc,nodempc,coefmpc,
+     &              labmpc,nmpc,nmpc_,mpcfree,ikmpc,ilmpc,
+     &              nk,nk_,nodeboun,ndirboun,ikboun,ilboun,
+     &              nboun,nboun_,nnodes,nodeact,co,label,
+     &              typeboun,iperturb,node,idirref,xboun)
+!
+!              end meanrotationmpc
+!
+!              SPC angle term
+!
+               if(nodeact.ne.-1) then
+                  idir=1
+                  call forcadd(nk,idir,val,nodeforc,
+     &              ndirforc,xforc,nforc,nforc_,iamforc,
+     &              iamplitude,nam,ntrans,trab,inotr,co,
+     &              ikforc,ilforc,isector,add,user,idefforc)
+!
+!                 storing the index of the SPC with the angle
+!                 value in ilboun(id)
+!
+                  ilforc(id)=nforc
+               endif
+!
+               cycle
+            endif
+!
 !           2d shell element: generate MPC's
 !
             if(lakon(ielem)(7:7).eq.'L') then
@@ -591,7 +738,7 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
                   if(nmpc.gt.nmpc_) then
                      write(*,*) 
      &                    '*ERROR in gen3dforc: increase nmpc_'
-                     stop
+                     call exit(201)
                   endif
                   labmpc(nmpc)='                    '
                   ipompc(nmpc)=mpcfree
@@ -618,7 +765,7 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
                   if(mpcfree.eq.0) then
                      write(*,*) 
      &                    '*ERROR in gen3dforc: increase nmpc_'
-                     stop
+                     call exit(201)
                   endif
 !
                   if((j.le.nedge).and.(quadratic)) then
@@ -629,7 +776,7 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
                      if(mpcfree.eq.0) then
                         write(*,*) 
      &                       '*ERROR in gen3dforc: increase nmpc_'
-                        stop
+                        call exit(201)
                      endif
                   endif
 !
@@ -644,7 +791,7 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
                   if(mpcfree.eq.0) then
                      write(*,*) 
      &                    '*ERROR in gen3dforc: increase nmpc_'
-                     stop
+                     call exit(201)
                   endif
 !
                   nodempc(1,mpcfree)=node
@@ -654,7 +801,7 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
                   if(mpcfreenew.eq.0) then
                      write(*,*) 
      &                    '*ERROR in gen3dforc: increase nmpc_'
-                     stop
+                     call exit(201)
                   endif
 !
                   nodempc(3,mpcfree)=0
@@ -672,7 +819,7 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
                   if(nmpc.gt.nmpc_) then
                      write(*,*) 
      &                    '*ERROR in gen3dforc: increase nmpc_'
-                     stop
+                     call exit(201)
                   endif
                   labmpc(nmpc)='                    '
                   ipompc(nmpc)=mpcfree
@@ -690,7 +837,7 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
                         if(mpcfree.eq.0) then
                            write(*,*) 
      &                          '*ERROR in gen3dforc: increase nmpc_'
-                           stop
+                           call exit(201)
                         endif
                      enddo
                   nodempc(1,mpcfree)=node
@@ -700,7 +847,7 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
                   if(mpcfreenew.eq.0) then
                      write(*,*) 
      &                    '*ERROR in gen3dforc: increase nmpc_'
-                     stop
+                     call exit(201)
                   endif
                   nodempc(3,mpcfree)=0
                   mpcfree=mpcfreenew
@@ -711,7 +858,7 @@ c               xn(3)=dd*(r(2,1)-r(1,2))
 !              element
 !
                node=knor(indexk+2)
-               val=xforc(i)
+c               val=xforc(i)
 !
                call forcadd(node,idir,val,nodeforc,
      &              ndirforc,xforc,nforc,nforc_,iamforc,
