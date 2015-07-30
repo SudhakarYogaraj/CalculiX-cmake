@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(CalculiX C Fortran)
 
-include_directories(../../usr/include)
+include_directories(../../usr/include/spooles)
 LINK_DIRECTORIES(../../usr/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/../../usr/lib)
 
@@ -665,5 +665,5 @@ add_library(calculix SHARED ${CALCULIX_SRCS} ${FORTRAN_SRCS})
 # target_link_libraries(calculix -lspooles -lpthread -larpack -llapack -lblas -lm)
 
 add_executable(ccx src/ccx_2.7.c)
-target_link_libraries(ccx calculix -lspoolesMT -lspooles -larpack -llapack -lblas -lm gfortran)
+target_link_libraries(ccx calculix -lspooles -larpack -llapack -lblas -lm gfortran)
 
