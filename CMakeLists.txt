@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(CalculiX C Fortran)
 
-include_directories(../../usr/include)
+include_directories(../../usr/include/spooles)
 LINK_DIRECTORIES(../../usr/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/../../usr/lib)
 
@@ -264,7 +264,7 @@ src/fortran/gaps.f
 src/fortran/gasmechbc.f
 src/fortran/gaspipe.f
 src/fortran/gaspipe_fanno.f
-src/fortran/gauss.f
+#src/fortran/gauss.f
 src/fortran/gen3dboun.f
 src/fortran/gen3dconnect.f
 src/fortran/gen3delem.f
@@ -642,7 +642,7 @@ src/fortran/writetetmesh.f
 src/fortran/writevfa.f
 src/fortran/writeview.f
 src/fortran/wye.f
-src/fortran/xlocal.f
+#src/fortran/xlocal.f
 src/fortran/zeta_calc.f
 src/fortran/zienzhu.f
 )
@@ -732,5 +732,5 @@ add_library(calculix SHARED ${CALCULIX_SRCS} ${FORTRAN_SRCS})
 # target_link_libraries(calculix -lspooles -lpthread -larpack -llapack -lblas -lm)
 
 add_executable(ccx src/ccx_2.8p2.c)
-target_link_libraries(ccx calculix -lspoolesMT -lspooles -larpack -llapack -lblas -lm gfortran)
+target_link_libraries(ccx calculix -lspooles -larpack -llapack -lblas -lm gfortran)
 

@@ -23,7 +23,7 @@ for i in *.inp; do
 #       the .frd file
 #
 
-        /usr/local/bin/ccx_2.8p2  ${i%.inp} >> $tempfile 2>&1
+        ../../../builds/CalculiX/ccx  ${i%.inp} >> $tempfile 2>&1
 
 #
 #       check whether the .dat and .dat.ref files exist
