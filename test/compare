@@ -3,7 +3,8 @@
 rm -f error.*
 
 tempfile=temp.$$
-errorfile=error.$$
+errorfile=error_output
+rm -f $tempfile
 
 for i in *.inp; do
 
